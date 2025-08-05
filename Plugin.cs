@@ -25,6 +25,8 @@ public class Plugin : BaseUnityPlugin
         GlobalLogSource = base.Logger;
         GlobalLogSource.LogInfo($"Plugin {PluginDetails.PLUGIN_NAME} is loaded!");
         Harmony.CreateAndPatchAll(typeof(Plugin), PluginDetails.PLUGIN_GUID);
+        
+        Configs.BindConfigs(Config);
     }
 
     private void Start()
@@ -36,32 +38,42 @@ public class Plugin : BaseUnityPlugin
     [HarmonyPrefix]
     private static void HideTrack(ref string trackName)
     {
-        trackName = "";
+        if (!Configs.IsMusicTextEnabled.Value)
+        {
+            GlobalLogSource.LogInfo("Music text DISABLED -> hiding boombox music text");
+            trackName = "";
+        }
+        else
+        {
+            GlobalLogSource.LogInfo("Music text ENABLED -> showing boombox music text");
+        }
     }
 
     [HarmonyPatch(typeof(UIScreen), "Open", new Type[] {typeof(ScreenType), typeof(int), typeof(ScreenTransition), typeof(bool)})]
     [HarmonyPostfix]
-    private static void HideTime()
+    private static void HideTimer()
     {
         GameState currentGameState = GameStates.GetCurrent();
         if (currentGameState != GameState.GAME)
         {
-            //GlobalLogSource.LogInfo("Current game state is not GAME");
             return;
         }
         
         ScreenGameHud hudScreen = (ScreenGameHud)UIScreen.GetScreen(ScreenType.GAME_HUD);
         if (hudScreen == null)
         {
-            //GlobalLogSource.LogWarning("Could not fetch ScreenGameHud");
             return;
         }
-        
-        //GlobalLogSource.LogInfo("Got ScreenGameHud");
 
-        if (hudScreen.imtextTime.gameObject.activeSelf)
+        if (!Configs.IsTimerTextEnabled.Value)
         {
+            GlobalLogSource.LogInfo("Timer text DISABLED -> hiding boombox timer text");
             hudScreen.imtextTime.gameObject.SetActive(false);
+        }
+        else
+        {
+            GlobalLogSource.LogInfo("Timer text ENABLED -> showing boombox timer text");
+            hudScreen.imtextTime.gameObject.SetActive(true);
         }
     }
     
