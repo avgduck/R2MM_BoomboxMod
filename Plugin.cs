@@ -34,24 +34,9 @@ public class Plugin : BaseUnityPlugin
         ModDependenciesUtils.RegisterToModMenu(base.Info, PluginDetails.MODMENU_TEXT);
     }
 
-    [HarmonyPatch(typeof(ScreenGameHud), "SetTrack")]
-    [HarmonyPrefix]
-    private static void HideTrack(ref string trackName)
-    {
-        if (!Configs.IsMusicTextEnabled.Value)
-        {
-            GlobalLogSource.LogInfo("Music text DISABLED -> hiding boombox music text");
-            trackName = "";
-        }
-        else
-        {
-            GlobalLogSource.LogInfo("Music text ENABLED -> showing boombox music text");
-        }
-    }
-
     [HarmonyPatch(typeof(UIScreen), "Open", new Type[] {typeof(ScreenType), typeof(int), typeof(ScreenTransition), typeof(bool)})]
     [HarmonyPostfix]
-    private static void HideTimer()
+    private static void HideText()
     {
         GameState currentGameState = GameStates.GetCurrent();
         if (currentGameState != GameState.GAME)
@@ -74,6 +59,16 @@ public class Plugin : BaseUnityPlugin
         {
             GlobalLogSource.LogInfo("Timer text ENABLED -> showing boombox timer text");
             hudScreen.imtextTime.gameObject.SetActive(true);
+        }
+        
+        if (!Configs.IsMusicTextEnabled.Value)
+        {
+            GlobalLogSource.LogInfo("Music text DISABLED -> hiding boombox music text");
+            hudScreen.lbTrack.text = "";
+        }
+        else
+        {
+            GlobalLogSource.LogInfo("Music text ENABLED -> showing boombox music text");
         }
     }
     
