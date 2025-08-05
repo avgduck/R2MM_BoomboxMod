@@ -1,4 +1,4 @@
-## BoomboxMod for R2ModMan
+## [BoomboxMod for R2ModMan](https://thunderstore.io/c/lethal-league-blaze/p/avg_duck/R2MM_BoomboxMod/)
 
 Allows the user to individually hide the music text and timer text on the in-game boombox HUD.\
 Adjustable using [MrGentle's ModMenu](https://thunderstore.io/c/lethal-league-blaze/p/MrGentle/ModMenu/) or the config file.
