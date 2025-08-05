@@ -1,7 +1,7 @@
 {
   "name": "R2MM_BoomboxMod",
   "version_number": "1.0.0",
-  "website_url": "https//github.com/",
+  "website_url": "https://github.com/avgduck/R2MM_BoomboxMod",
   "description": "Allows the user to individually hide the music text and timer text on the in-game boombox HUD",
   "dependencies": [
     "Glomzubuk-LLBModdingLib-0.10.4"
